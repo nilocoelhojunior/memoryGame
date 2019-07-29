@@ -1,0 +1,19 @@
+{
+  "flow.useNPMPackagedFlow": true,
+  "javascript.validate.enable": false,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true
+  },
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "prettier.eslintIntegration": true,
+  "files.trimTrailingWhitespace": true
+}
