@@ -34,8 +34,7 @@ const Home = props => {
 
 Home.navigationOptions = {
   title: "Home",
-  header: null,
-  headerMode: "none"
+  header: null
 };
 
 export default Home;
