@@ -95,7 +95,8 @@ class ListCard extends React.PureComponent {
       tmp: "",
       records: shuffleCards([...defaultCards]),
       actions: 0,
-      block: false
+      block: false,
+      saved: false,
     };
   }
 
@@ -142,14 +143,16 @@ class ListCard extends React.PureComponent {
     );
   };
 
-  componentDidUpdate = async () => {
-    const { actions, records } = this.state;
-    const { player } = this.props;
+  componentDidUpdate = () => {
+    const { actions, records, saved } = this.state;
+    const { player, onFinished } = this.props;
     const finished = records.every(item => item.visible === true);
-    if (finished) {
-      await storage.set(player, actions);
-      const data = await storage.getAll();
-      console.log(data);
+
+    if (finished && !saved) {
+      this.setState({ saved: true }, async () => {
+        await storage.set(player, actions);
+        onFinished();
+      });
     }
   };
 
