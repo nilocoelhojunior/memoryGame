@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { Modal, View, TouchableHighlight, Text } from "react-native";
 import { Container } from "native-base";
-import Card from "../Card/Card";
+import { Card, GameInfo } from "../";
 import { Wrapper } from "./style";
 
 const defaultCards = [
@@ -87,18 +88,19 @@ const shuffleCards = data => {
   return array;
 };
 
-const ListCard = () => {
-  const [data, setData] = useState({
-    tmp: "",
-    records: shuffleCards([...defaultCards]),
-    actions: 0
-  });
+class ListCard extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tmp: "",
+      records: shuffleCards([...defaultCards]),
+      actions: 0,
+      block: false
+    };
+  }
 
-  const handlePress = (name, index) => {
-    const { tmp, records } = data;
-    if (records[index].visible) {
-      return;
-    }
+  handleGame = (name, index) => {
+    const { tmp, records } = this.state;
 
     if (tmp.length > 0 && tmp === name) {
       const updated = records.map(item => {
@@ -107,11 +109,11 @@ const ListCard = () => {
         }
         return item;
       });
-      setData({ ...data, tmp: "", records: [...updated] });
+      this.setState({ tmp: "", block: false, records: [...updated] });
     } else if (tmp.length === 0) {
       const updated = [...records];
       updated[index].visible = true;
-      setData({ ...data, tmp: name, records: [...updated] });
+      this.setState({ tmp: name, block: false, records: [...updated] });
     } else {
       const updated = records.map(item => {
         if (item.name === name || item.name === tmp) {
@@ -119,19 +121,47 @@ const ListCard = () => {
         }
         return item;
       });
-      setData({ ...data, tmp: "", records: [...updated] });
+      this.setState({ tmp: "", block: false, records: [...updated] });
     }
   };
 
-  return (
-    <Container>
-      <Wrapper>
-        {data.records.map((card, index) => (
-          <Card key={index} index={index} onPress={handlePress} {...card} />
-        ))}
-      </Wrapper>
-    </Container>
-  );
-};
+  handlePress = (name, index) => {
+    const { actions, tmp, records } = this.state;
+
+    if (records[index].visible) {
+      return;
+    }
+
+    const updated = [...records];
+    updated[index].visible = true;
+    this.setState(
+      { records: [...updated], block: true, actions: actions + 1 },
+      () => {
+        setTimeout(() => this.handleGame(name, index), 350);
+      }
+    );
+  };
+
+  render() {
+    const { actions, block, records } = this.state;
+    const { player } = this.props;
+    return (
+      <Container>
+        <Wrapper>
+          <GameInfo actions={actions} player={player} />
+          {records.map((card, index) => (
+            <Card
+              block={block}
+              key={index}
+              index={index}
+              onPress={this.handlePress}
+              {...card}
+            />
+          ))}
+        </Wrapper>
+      </Container>
+    );
+  }
+}
 
 export default ListCard;

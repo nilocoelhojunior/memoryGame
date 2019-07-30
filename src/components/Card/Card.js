@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { TouchableHighlight } from "react-native";
 import { Icon } from "native-base";
 import { Wrapper } from "./style";
@@ -8,7 +8,7 @@ const Card = props => {
     props.onPress(props.name, props.index);
   };
   return (
-    <TouchableHighlight onPress={toggleCard}>
+    <TouchableHighlight onPress={toggleCard} disabled={props.block}>
       <Wrapper>{props.visible && <Icon {...props} />}</Wrapper>
     </TouchableHighlight>
   );
