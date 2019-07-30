@@ -2,12 +2,15 @@ import React from "react";
 import { Container, Button, Text, H1 } from "native-base";
 
 import { Content, Header, Separator } from "./style";
-import { GAME } from "../../router";
+import { GAME, RANKING } from "../../router";
 
 const Home = props => {
   const goToGame = () => {
-    console.log("GO TO GAME");
     props.navigation.navigate(GAME);
+  };
+
+  const goToRanking = () => {
+    props.navigation.navigate(RANKING);
   };
 
   return (
@@ -20,7 +23,7 @@ const Home = props => {
           <Text>Jogar</Text>
         </Button>
         <Separator />
-        <Button rounded>
+        <Button rounded onPress={goToRanking}>
           <Text>Ranking</Text>
         </Button>
         <Separator />
