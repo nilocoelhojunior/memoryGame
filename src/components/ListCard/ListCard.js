@@ -1,8 +1,8 @@
 import React from "react";
-import { Modal, View, TouchableHighlight, Text } from "react-native";
 import { Container } from "native-base";
 import { Card, GameInfo } from "../";
 import { Wrapper } from "./style";
+import storage from "../../storage/storage";
 
 const defaultCards = [
   {
@@ -140,6 +140,17 @@ class ListCard extends React.PureComponent {
         setTimeout(() => this.handleGame(name, index), 350);
       }
     );
+  };
+
+  componentDidUpdate = async () => {
+    const { actions, records } = this.state;
+    const { player } = this.props;
+    const finished = records.every(item => item.visible === true);
+    if (finished) {
+      await storage.set(player, actions);
+      const data = await storage.getAll();
+      console.log(data);
+    }
   };
 
   render() {

@@ -10,7 +10,7 @@ const AppNavigator = createStackNavigator(
     [GAME]: Game
   },
   {
-    initialRouteName: GAME
+    initialRouteName: HOME
   }
 );
 
